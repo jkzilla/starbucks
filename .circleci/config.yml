@@ -366,7 +366,7 @@ jobs:
       - run:
           name: "Run load tests"
           command: |
-            k6 run - <<'EOF'
+            k6 run - \<<'EOF'
             import http from 'k6/http';
             import { check, sleep } from 'k6';
 
