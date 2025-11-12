@@ -1,0 +1,23 @@
+type Coffee {
+  id: ID!
+  name: String!
+  size: String!
+  price: Float!
+  quantityAvailable: Int!
+  description: String
+}
+
+type PurchaseResult {
+  success: Boolean!
+  message: String!
+  remainingQuantity: Int!
+}
+
+type Query {
+  coffees: [Coffee!]!
+  coffee(id: ID!): Coffee
+}
+
+type Mutation {
+  purchaseCoffee(id: ID!, quantity: Int!): PurchaseResult!
+}
