@@ -60,23 +60,27 @@ jobs:
   # Security scanning with TruffleHog
   scan-secrets:
     docker:
-      - image: trufflesecurity/trufflehog:latest
+      - image: us-docker.pkg.dev/thog-artifacts/public/scanner:latest
     steps:
       - checkout
       - run:
-          name: "Scan for secrets"
+          name: "Scan for secrets with TruffleHog"
           command: |
-            trufflehog filesystem . \
-              --only-verified \
+            # Run TruffleHog scanner with config
+            /thog scan \
+              --config=/root/project/.trufflehog/config.yaml \
               --json > trufflehog-results.json || true
             
             # Show results
+            echo "=== TruffleHog Scan Results ==="
             cat trufflehog-results.json
             
             # Fail if secrets found
             if [ -s trufflehog-results.json ]; then
               echo "❌ Secrets detected! Please remove them before merging."
               exit 1
+            else
+              echo "✅ No verified secrets found"
             fi
       - store_artifacts:
           path: trufflehog-results.json
