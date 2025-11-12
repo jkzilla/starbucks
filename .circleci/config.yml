@@ -429,10 +429,7 @@ workflows:
   test-and-deploy:
     jobs:
       # Fan-out: Security scan runs first (gate)
-      - scan-secrets:
-          filters:
-            branches:
-              ignore: main
+      - scan-secrets
       
       # Fan-out: Parallel backend jobs
       - backend-lint:
