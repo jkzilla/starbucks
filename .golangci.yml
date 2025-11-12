@@ -1,0 +1,54 @@
+run:
+  timeout: 5m
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gofmt
+    - goimports
+    - misspell
+    - revive
+    - gosec
+    - unconvert
+    - unparam
+    - goconst
+    - gocyclo
+    - dupl
+
+linters-settings:
+  errcheck:
+    check-blank: true
+  govet:
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 15
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - dupl
+        - gosec
+    - path: graph/generated.go
+      linters:
+        - all
+    - path: graph/model/models_gen.go
+      linters:
+        - all
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true

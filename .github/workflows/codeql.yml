@@ -1,0 +1,90 @@
+# GitHub Advanced Security - CodeQL Analysis
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build steps.
+
+name: "CodeQL Advanced Security"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+  schedule:
+    # Run at 2 AM UTC every day
+    - cron: '0 2 * * *'
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      # required for all workflows
+      security-events: write
+      # required to fetch internal or private CodeQL packs
+      packages: read
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - language: go
+          build-mode: autobuild
+        - language: javascript-typescript
+          build-mode: none
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+        # Custom queries from GitHub Security Lab
+        queries: +security-extended,security-and-quality
+        # Enable ML-powered alerts
+        config: |
+          paths-ignore:
+            - '**/node_modules'
+            - '**/dist'
+            - '**/build'
+            - '**/*.test.ts'
+            - '**/*.test.tsx'
+            - '**/*.spec.ts'
+            - '**/test/**'
+            - '**/tests/**'
+            - 'frontend/e2e/**'
+            - 'graph/generated.go'
+            - 'graph/model/models_gen.go'
+
+    # Build for Go if needed
+    - if: matrix.language == 'go' && matrix.build-mode == 'manual'
+      name: Build Go application
+      run: |
+        go mod download
+        go build -v ./...
+
+    # Perform CodeQL Analysis
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
+        output: sarif-results
+        upload: true
+
+    # Upload SARIF file as artifact
+    - name: Upload SARIF as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: codeql-sarif-${{ matrix.language }}
+        path: sarif-results
+        retention-days: 30

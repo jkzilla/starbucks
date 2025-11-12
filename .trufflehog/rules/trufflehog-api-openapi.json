@@ -1,0 +1,3087 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "TruffleHog",
+    "description": "TruffleHog API allows clients to manage sources and secrets. \n\nAPI requests require `X-Thog-Key` and `X-Thog-Secret` headers which can be generated at the `your-instance.trufflehog.org/api-keys`\n",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-instance.trufflehog.org/api"
+    }
+  ],
+  "security": [
+    {
+      "apiKey": [],
+      "appId": []
+    }
+  ],
+  "paths": {
+    "/v2/secrets": {
+      "get": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "List secrets V2",
+        "description": "List all secrets for all sources.",
+        "parameters": [
+          {
+            "name": "verified",
+            "in": "query",
+            "description": "Filters for secrets with the specified `verified` status",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "A fuzzy search string that searches the secret location's email, source repository (if applicable), and source name entries, as well as the secret's type and redacted status",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_date_after",
+            "in": "query",
+            "description": "Filters secrets to include only those first discovered after the specified date and time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_date_before",
+            "in": "query",
+            "description": "Filters secrets to include only those first discovered before the specified date and time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_seen_after",
+            "in": "query",
+            "description": "Filters secrets to include only those last found in a scan after the specified date and time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_seen_before",
+            "in": "query",
+            "description": "Filters secrets to include only those last found in a scan before the specified date and time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_verified_after",
+            "in": "query",
+            "description": "Filters secrets to include only those last verified as live after the specified date and time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_verified_before",
+            "in": "query",
+            "description": "Filters secrets to include only those last verified as live before the specified date and time.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies the page number of the secrets to be displayed.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "secret_locations__source__type",
+            "in": "query",
+            "description": "Specifies one or more sources (comma-delimited if multiple) to filter by\n  * `Github`\n  * `Slack`\n  * `ECR`\n  * `Jira`\n  * `S3`\n  * `GCS`\n  * `GitLab`\n  * `Confluence`\n  * `AzureStorage`\n  * `CircleCI`\n  * `Filesystem`\n  * `GithubUnauthdRepo`\n  * `GithubUnauthdOrg`\n  * `PypiUnauthdPackages`\n  * `NpmUnauthdPackages`\n  * `Docker`\n  * `BitBucket`\n  * `S3Unauthed`\n  * `PublicGit`\n  * `Buildkite`\n  * `Git`\n  * `Gerrit`\n  * `Jenkins`\n  * `Teams`\n  * `Artifactory`\n  * `PublicEventMonitoring`\n  * `SlackRealtime`\n  * `GCSUnauthed`\n  * `Sharepoint`\n  * `GoogleDrive`\n",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__source__id",
+            "in": "query",
+            "description": "Specifies the source ID to filter by.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "secret_locations__source__scanner_group__id",
+            "in": "query",
+            "description": "Specifies the scanner ID to filter by.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "secret_locations__repository",
+            "in": "query",
+            "description": "Specifies the repository value to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__bucket",
+            "in": "query",
+            "description": "Specifies the bucket value to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__space",
+            "in": "query",
+            "description": "Specifies the Confluence space value to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__image",
+            "in": "query",
+            "description": "Specifies the Docker image name value to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__channel",
+            "in": "query",
+            "description": "Specifies the Slack or Teams channel name to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__workspace",
+            "in": "query",
+            "description": "Specifies the Bitbucket workspace name to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__package",
+            "in": "query",
+            "description": "Specifies the NPM or PyPi package name to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__account",
+            "in": "query",
+            "description": "Specifies the Azure Storage account name to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_locations__issue",
+            "in": "query",
+            "description": "Specifies the Jira issue to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secret_type",
+            "in": "query",
+            "description": "Specifies the secret type to filter by.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "exclude_secret_type",
+            "in": "query",
+            "description": "Exclude secrets of the specified types (comma-delimited if multiple, case-insensitive)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Smartsheets,Slack"
+          },
+          {
+            "name": "triage_state",
+            "in": "query",
+            "description": "Specifies the triage state to filter by.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "UNTRIAGED",
+                "FALSE_POSITIVE",
+                "RESOLVED",
+                "WILL_NOT_FIX"
+              ],
+              "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+            }
+          },
+          {
+            "name": "has_no_last_verified",
+            "in": "query",
+            "description": "Specifies if results should only include secrets that have never been verified.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_connection_issues",
+            "in": "query",
+            "description": "Specifies if results should only include secrets that have a connection issue from their last scan.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "connection_issue_type",
+            "in": "query",
+            "description": "Specifies the connection issue type to filter by.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "NETWORK",
+                  "DNS",
+                  "TLS",
+                  "SERVER",
+                  "CLIENT"
+                ],
+                "description": "Describes the the connection error type a secret\n"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated secrets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lastPage": {
+                      "type": "integer"
+                    },
+                    "countItems": {
+                      "type": "integer"
+                    },
+                    "countItemsOnPage": {
+                      "type": "integer"
+                    },
+                    "current": {
+                      "type": "integer"
+                    },
+                    "next": {
+                      "type": "string"
+                    },
+                    "previous": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "$ref": "#/components/schemas/ListOfSecretV2s"
+                    },
+                    "total_pages": {
+                      "type": "integer"
+                    },
+                    "cur_page": {
+                      "type": "integer"
+                    },
+                    "verification_error_count": {
+                      "type": "integer",
+                      "description": "Number of secrets with the given filters that have verification errors\n"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secrets/{id}": {
+      "get": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "Retrieve secret V2",
+        "description": "Get a specific secret",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the secret to be retrieved",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SecretV2"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "Modify secret V2",
+        "description": "Modify a secret",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "triage_state": {
+                    "type": "string",
+                    "enum": [
+                      "UNTRIAGED",
+                      "FALSE_POSITIVE",
+                      "RESOLVED",
+                      "WILL_NOT_FIX"
+                    ],
+                    "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the secret to be modified",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SecretV2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "triage_state": {
+                      "description": "List of invalid input errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secrets/{id}/reverify": {
+      "post": {
+        "summary": "Reverify Secret",
+        "description": "Initiates reverification of a github secret.",
+        "operationId": "reverifySecret",
+        "tags": [
+          "Secrets"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the github secret to reverify.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Reverification initiated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, secret not verified or no GitHub locations found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Secret id not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to initiate reverification.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secrets/{id}/reverify-status": {
+      "get": {
+        "summary": "Check Reverification Status",
+        "description": "Checks the status of a secret's reverification.",
+        "operationId": "checkVerificationStatus",
+        "tags": [
+          "Secrets"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the secret to check the reverification status.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reverification status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "pending",
+                        "stale"
+                      ],
+                      "description": "Describes the reverification state of a secret * `pending` - A reverification job is already in progress. * `stale` - There are no pending or in progress reverification jobs.\n"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Secret not found or not verified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secrets/bulk_triage": {
+      "patch": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "Bulk triage secrets",
+        "description": "Update triage_status on multiple secrets",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "secret_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "List of secret IDs to change the triage state to\n"
+                  },
+                  "triage_state": {
+                    "type": "string",
+                    "enum": [
+                      "UNTRIAGED",
+                      "FALSE_POSITIVE",
+                      "RESOLVED",
+                      "WILL_NOT_FIX"
+                    ],
+                    "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content success status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SecretV2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "triage_state": {
+                      "description": "List of invalid input errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secret_locations": {
+      "get": {
+        "tags": [
+          "Secret Locations"
+        ],
+        "summary": "List secret locations",
+        "description": "List all secret locations for all sources.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies the page number of the secrets to be displayed",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of items per page (max 250)",
+            "schema": {
+              "type": "integer",
+              "maximum": 250
+            }
+          },
+          {
+            "name": "secret__id",
+            "in": "query",
+            "description": "Filters for secret locations related to a specific secret",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "created_date_after",
+            "in": "query",
+            "description": "Filter for secret locations created on or after this date (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-05T00:00:00Z"
+            }
+          },
+          {
+            "name": "created_date_before",
+            "in": "query",
+            "description": "Filter for secret locations created on or before this date (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-06T00:00:00Z"
+            }
+          },
+          {
+            "name": "modified_date_after",
+            "in": "query",
+            "description": "Filter for secret locations modified on or after this date (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-05T00:00:00Z"
+            }
+          },
+          {
+            "name": "modified_date_before",
+            "in": "query",
+            "description": "Filter for secret locations modified on or before this date (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2025-08-06T00:00:00Z"
+            }
+          },
+          {
+            "name": "ordering",
+            "in": "query",
+            "description": "Order results by field (prefix with - for descending order)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "created_date",
+                "-created_date",
+                "modified_date",
+                "-modified_date",
+                "id",
+                "-id"
+              ],
+              "example": "-created_date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All secret locations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "lastPage": {
+                      "type": "integer"
+                    },
+                    "countItems": {
+                      "type": "integer"
+                    },
+                    "countItemsOnPage": {
+                      "type": "integer"
+                    },
+                    "current": {
+                      "type": "integer"
+                    },
+                    "next": {
+                      "type": "string"
+                    },
+                    "previous": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "$ref": "#/components/schemas/ListOfSecretLocations"
+                    },
+                    "total_pages": {
+                      "type": "integer"
+                    },
+                    "cur_page": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secret_locations/{id}": {
+      "get": {
+        "tags": [
+          "Secret Locations"
+        ],
+        "summary": "Retrieve secret location",
+        "description": "Retrieve a specific secret location.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the secret location to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Secret location",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/SecretLocation"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/secret_locations/repository_search/": {
+      "get": {
+        "tags": [
+          "Secret Locations"
+        ],
+        "summary": "Retrieve Secret Locations in Repository",
+        "description": "Retrieve secret locations based on repository query with pagination.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Query string to search in secret location repository."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Page number of the results to fetch."
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of results to return per page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A paginated list of secret locations that match the query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedSecretLocationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/secret-comments/{id}": {
+      "get": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "Retrieve secret comments",
+        "description": "Retrieve comments on a specific secret.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Secret ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comments on the secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListOfSecretCommments"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyze/{id}": {
+      "get": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "Retrieve Analyze data (beta)",
+        "description": "Retrieve associated Analyze data for a given secret. This feature is in beta and may be subject to change.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Analyze ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analyze data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sources": {
+      "get": {
+        "tags": [
+          "Sources"
+        ],
+        "summary": "List sources",
+        "description": "Lists all sources you've configured.",
+        "responses": {
+          "200": {
+            "description": "All sources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ListOfSources"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sources/add": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "summary": "Add source",
+        "description": "Adds a new source",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ID of added source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Source"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/issues": {
+      "get": {
+        "tags": [
+          "Issues"
+        ],
+        "summary": "List issues",
+        "description": "List issues with your TruffleHog instance",
+        "parameters": [
+          {
+            "name": "issue_state",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Specifies issue type (defaults to `ALL`)\n  * `ACTIVE`\n  * `SNOOZED`\n  * `RESOLVED`\n  * `ALL`\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All issues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lastPage": {
+                      "type": "integer"
+                    },
+                    "countItems": {
+                      "type": "integer"
+                    },
+                    "countItemsOnPage": {
+                      "type": "integer"
+                    },
+                    "current": {
+                      "type": "integer"
+                    },
+                    "next": {
+                      "type": "string"
+                    },
+                    "previous": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "$ref": "#/components/schemas/ListOfIssues"
+                    },
+                    "total_pages": {
+                      "type": "integer"
+                    },
+                    "cur_page": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid issue state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/issues/{id}": {
+      "get": {
+        "tags": [
+          "Issues"
+        ],
+        "summary": "Retrieve issue",
+        "description": "Retrieve specific issue with your TruffleHog instance",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Issue ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified issue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Issue not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/secrets": {
+      "get": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "List secrets V1 (Deprecated)",
+        "description": "List all secrets for all sources.",
+        "parameters": [
+          {
+            "name": "verified",
+            "in": "query",
+            "description": "Filters for secrets with the specified `verified` status",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies the page number of the secrets to be displayed. NOTE: If a page is not specified, the results will not be paginated and `cur_page` and `total_pages` will not be returned",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Limits the number of items on a page (defaults to 100, ignored if `page` is not specified)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All secrets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ListOfSecrets"
+                    },
+                    "total_pages": {
+                      "type": "integer",
+                      "optional": true
+                    },
+                    "cur_page": {
+                      "type": "integer",
+                      "optional": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/secrets/{id}": {
+      "patch": {
+        "tags": [
+          "Secrets"
+        ],
+        "summary": "Modify secret V1 (Deprecated)",
+        "description": "Modify a secret",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "triage_state": {
+                    "type": "string",
+                    "enum": [
+                      "UNTRIAGED",
+                      "FALSE_POSITIVE",
+                      "RESOLVED",
+                      "WILL_NOT_FIX"
+                    ],
+                    "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the secret to be modified",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Value of modified triage_state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "The ID of the updated secret"
+                    },
+                    "triage_state": {
+                      "type": "string",
+                      "enum": [
+                        "UNTRIAGED",
+                        "FALSE_POSITIVE",
+                        "RESOLVED",
+                        "WILL_NOT_FIX"
+                      ],
+                      "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "triage_state": {
+                      "description": "List of invalid input errors",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/historical_metrics/live_secrets": {
+      "get": {
+        "summary": "Get Live Secrets Metrics",
+        "description": "Retrieves live secrets metrics within a specified date range.",
+        "operationId": "getLiveSecrets",
+        "tags": [
+          "Historical Metrics"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "description": "Start date for the metrics in YYYY-MM-DD format.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "description": "End date for the metrics in YYYY-MM-DD format.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "source_id",
+            "in": "query",
+            "required": false,
+            "description": "ID of the source to filter the metrics.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "num_dates",
+            "in": "query",
+            "required": false,
+            "description": "Number of evenly spaced dates to return between start_date and end_date.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metrics retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found for the specified date range and source ID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/historical_metrics/time_to_rotate": {
+      "get": {
+        "summary": "Get Time to Rotate Metrics",
+        "description": "Retrieves time to rotate metrics within a specified date range.",
+        "operationId": "getTimeToRotate",
+        "tags": [
+          "Historical Metrics"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "description": "Start date for the metrics in YYYY-MM-DD format.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "description": "End date for the metrics in YYYY-MM-DD format.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "source_id",
+            "in": "query",
+            "required": false,
+            "description": "ID of the source to filter the metrics.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metrics retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "per_date_averages": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No data found for the specified date range and source ID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DRFError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api_keys/": {
+      "get": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "List all API keys",
+        "description": "Get a list of all API keys.",
+        "responses": {
+          "200": {
+            "description": "List of API keys.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/APIKey"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Create a new API key",
+        "description": "Generate a new API key given a name and optional expiration date.\nIf an expiration date is provided, it must be a future date.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The name and optional expiration date for the new API key.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name for the new API key.",
+                  "required": true
+                },
+                "expiration_date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The optional expiration date for the new API key."
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The created API key details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKeyCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api_keys/{id}/": {
+      "get": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Retrieve an API key",
+        "description": "Get the details of a specific API key.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the API key to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKey"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "API key not found."
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Delete an API",
+        "description": "Remove a specific API key from the system.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the API key to delete.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted."
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "404": {
+            "description": "API key not found."
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notifiers/": {
+      "get": {
+        "tags": [
+          "Notifiers"
+        ],
+        "summary": "List all notifiers",
+        "description": "Get a list of all configured notifiers.",
+        "responses": {
+          "200": {
+            "description": "List of configured notifiers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Notifier"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notifiers/{id}/create": {
+      "post": {
+        "tags": [
+          "Notifiers"
+        ],
+        "summary": "Creates notifications",
+        "description": "Given a list of secret IDs, this endpoint will create notifications for each secret using the configured notifier. A maximum of 100 secret IDs can be processed in a single request.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "secret_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "List of secret IDs to create notifications for."
+                  }
+                },
+                "required": [
+                  "secret_ids"
+                ]
+              },
+              "example": {
+                "secret_ids": [
+                  123,
+                  456,
+                  789
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully queued notifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "secret_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "detail": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "example": "limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Thog-Secret",
+        "in": "header"
+      },
+      "appId": {
+        "type": "apiKey",
+        "name": "X-Thog-Key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "APIKey": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique ID of the API key."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the API key."
+          },
+          "key_id": {
+            "type": "string",
+            "description": "The key ID of the API key."
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The expiration date of the API key."
+          }
+        }
+      },
+      "APIKeyCreationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique ID of the API key."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the API key."
+          },
+          "key_id": {
+            "type": "string",
+            "description": "The key ID of the API key."
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret associated with the API key."
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The expiration date of the API key."
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "last_completed": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp of the last completed scan"
+          }
+        }
+      },
+      "ListOfSecrets": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Secret"
+        }
+      },
+      "ListOfSecretV2s": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SecretV2"
+        }
+      },
+      "ListOfSecretLocations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SecretLocation"
+        }
+      },
+      "ListOfSources": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Source"
+        }
+      },
+      "ListOfIssues": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Issue"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "err": {
+            "type": "string"
+          }
+        }
+      },
+      "DRFError": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string"
+          }
+        }
+      },
+      "AddSource": {
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Docker"
+          },
+          {
+            "$ref": "#/components/schemas/GithubUnauthdOrg"
+          },
+          {
+            "$ref": "#/components/schemas/Confluence"
+          },
+          {
+            "$ref": "#/components/schemas/Gcs"
+          },
+          {
+            "$ref": "#/components/schemas/GithubUnauthdRepo"
+          },
+          {
+            "$ref": "#/components/schemas/Gitlab"
+          },
+          {
+            "$ref": "#/components/schemas/NpmUnauthdPackages"
+          },
+          {
+            "$ref": "#/components/schemas/Jira"
+          },
+          {
+            "$ref": "#/components/schemas/Ecr"
+          },
+          {
+            "$ref": "#/components/schemas/PypiUnauthdPackages"
+          },
+          {
+            "$ref": "#/components/schemas/Circleci"
+          },
+          {
+            "$ref": "#/components/schemas/AzureStorage"
+          }
+        ]
+      },
+      "AzureStorage": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "azure_storage"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Circleci": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "circleci"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Confluence": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "confluence"
+            ],
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Docker": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "docker"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Ecr": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "ecr"
+            ],
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Gcs": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "gcs"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PublicGit": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "public_git"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Gitlab": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "gitlab"
+            ],
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Jira": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "secretval": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "jira"
+            ],
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "NpmUnauthdPackages": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "npm_unauthd_packages"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PypiUnauthdPackages": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "pypi_unauthd_packages"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Secret": {
+        "properties": {
+          "context": {
+            "type": "object",
+            "properties": {
+              "account_name": {
+                "optional": true,
+                "type": "string"
+              },
+              "bucket": {
+                "optional": true,
+                "type": "string"
+              },
+              "build_number": {
+                "optional": true,
+                "type": "string"
+              },
+              "build_step": {
+                "optional": true,
+                "type": "string"
+              },
+              "channel_identifier": {
+                "optional": true,
+                "type": "string"
+              },
+              "channel_name": {
+                "optional": true,
+                "type": "string"
+              },
+              "commit": {
+                "optional": true,
+                "type": "string"
+              },
+              "image_hash": {
+                "optional": true,
+                "type": "string"
+              },
+              "image_name": {
+                "optional": true,
+                "type": "string"
+              },
+              "issue": {
+                "optional": true,
+                "type": "string"
+              },
+              "layer_hash": {
+                "optional": true,
+                "type": "string"
+              },
+              "package_name": {
+                "optional": true,
+                "type": "string"
+              },
+              "region": {
+                "optional": true,
+                "type": "string"
+              },
+              "registry": {
+                "optional": true,
+                "type": "string"
+              },
+              "release_name": {
+                "optional": true,
+                "type": "string"
+              },
+              "repository": {
+                "optional": true,
+                "type": "string"
+              },
+              "snippet_id": {
+                "optional": true,
+                "type": "string"
+              },
+              "tag": {
+                "optional": true,
+                "type": "string"
+              },
+              "timestamp": {
+                "optional": true,
+                "type": "string"
+              },
+              "title": {
+                "optional": true,
+                "type": "string"
+              },
+              "url": {
+                "optional": true,
+                "type": "string"
+              },
+              "user_id": {
+                "optional": true,
+                "type": "string"
+              },
+              "email": {
+                "optional": true,
+                "type": "string"
+              },
+              "username": {
+                "optional": true,
+                "type": "string"
+              },
+              "vcs_type": {
+                "optional": true,
+                "type": "string"
+              },
+              "workspace_id": {
+                "optional": true,
+                "type": "string"
+              },
+              "workspace_name": {
+                "optional": true,
+                "type": "string"
+              }
+            }
+          },
+          "redacted": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "secret_type": {
+            "type": "string"
+          },
+          "found_date": {
+            "type": "string"
+          },
+          "triage_state": {
+            "type": "string",
+            "enum": [
+              "UNTRIAGED",
+              "FALSE_POSITIVE",
+              "RESOLVED",
+              "WILL_NOT_FIX"
+            ],
+            "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+          }
+        }
+      },
+      "SecretV2": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "secret_type": {
+            "type": "string"
+          },
+          "redacted": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "found_date": {
+            "type": "string"
+          },
+          "triage_state": {
+            "type": "string",
+            "enum": [
+              "UNTRIAGED",
+              "FALSE_POSITIVE",
+              "RESOLVED",
+              "WILL_NOT_FIX"
+            ],
+            "description": "Describes the the triage state of a secret as set by the customer\n  * `UNTRIAGED` - A triage state has not been set (referred to as \"active\" in the UI)\n  * `FALSE_POSITIVE` - The secret has been marked as a false positive (reffered to as \"invalid\" in the UI)\n  * `RESOLVED` - The secret leak has been resolved\n  * `WILL_NOT_FIX` - The secret leak has been confirmed, but will not be fixed\n"
+          },
+          "last_verified": {
+            "type": "string"
+          },
+          "last_seen": {
+            "type": "string"
+          },
+          "created_date": {
+            "type": "string"
+          },
+          "modified_date": {
+            "type": "string"
+          },
+          "date_rotated": {
+            "type": "string",
+            "description": "Our best estimate for when a secret was rotated -- identified by when the secret, which was once verified, is no longer verified.\n"
+          },
+          "user_defined": {
+            "type": "boolean"
+          },
+          "secret_locations_count": {
+            "type": "integer"
+          },
+          "distinct_source_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "distinct_source_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "verification_error_message": {
+            "type": "string",
+            "nullable": true
+          },
+          "analyze_id": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "SecretLocation": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "secret_id": {
+            "type": "integer"
+          },
+          "repository": {
+            "optional": true,
+            "type": "string"
+          },
+          "bucket": {
+            "optional": true,
+            "type": "string"
+          },
+          "space": {
+            "optional": true,
+            "type": "string"
+          },
+          "registry": {
+            "optional": true,
+            "type": "string"
+          },
+          "channel_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "workspace_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "package_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "account_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "file_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "issue": {
+            "optional": true,
+            "type": "string"
+          },
+          "link": {
+            "optional": true,
+            "type": "string"
+          },
+          "azure_container": {
+            "optional": true,
+            "type": "string"
+          },
+          "email": {
+            "optional": true,
+            "type": "string"
+          },
+          "snippet_id": {
+            "optional": true,
+            "type": "string"
+          },
+          "title": {
+            "optional": true,
+            "type": "string"
+          },
+          "commit": {
+            "optional": true,
+            "type": "string"
+          },
+          "timestamp": {
+            "optional": true,
+            "type": "string"
+          },
+          "org": {
+            "optional": true,
+            "type": "string"
+          },
+          "pipeline": {
+            "optional": true,
+            "type": "string"
+          },
+          "build_number": {
+            "optional": true,
+            "type": "string"
+          },
+          "vcs_type": {
+            "optional": true,
+            "type": "string"
+          },
+          "username": {
+            "optional": true,
+            "type": "string"
+          },
+          "build_step": {
+            "optional": true,
+            "type": "string"
+          },
+          "page": {
+            "optional": true,
+            "type": "string"
+          },
+          "version": {
+            "optional": true,
+            "type": "string"
+          },
+          "image_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "layer_hash": {
+            "optional": true,
+            "type": "string"
+          },
+          "tag": {
+            "optional": true,
+            "type": "string"
+          },
+          "region": {
+            "optional": true,
+            "type": "string"
+          },
+          "user_id": {
+            "optional": true,
+            "type": "string"
+          },
+          "location": {
+            "optional": true,
+            "type": "string"
+          },
+          "release_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "channel_identifier": {
+            "optional": true,
+            "type": "string"
+          },
+          "project_name": {
+            "optional": true,
+            "type": "string"
+          },
+          "line": {
+            "optional": true,
+            "type": "string"
+          },
+          "location_metadata": {
+            "optional": true,
+            "type": "string"
+          },
+          "channel_visibility": {
+            "optional": true,
+            "type": "string"
+          },
+          "decoder_type": {
+            "optional": true,
+            "type": "string"
+          },
+          "extra_data": {
+            "optional": true,
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SourceV2"
+          },
+          "created_date": {
+            "type": "string"
+          },
+          "modified_date": {
+            "type": "string"
+          }
+        }
+      },
+      "PaginatedSecretLocationResponse": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Total number of items available."
+          },
+          "next": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URI of the next page of results."
+          },
+          "previous": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URI of the previous page of results."
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SecretLocation"
+            }
+          }
+        }
+      },
+      "SourceV2": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "scanner_group": {
+            "type": "integer"
+          },
+          "scanner_group_name": {
+            "type": "string"
+          },
+          "is_local": {
+            "type": "boolean"
+          },
+          "is_using_local_config_file": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Issue": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "detected_on": {
+            "type": "string"
+          },
+          "date_issue_resolved": {
+            "type": "string"
+          },
+          "issue_type": {
+            "type": "string"
+          },
+          "issue_additional_details": {
+            "type": "string"
+          },
+          "related_entity": {
+            "type": "integer"
+          },
+          "snoozed_until": {
+            "type": "string"
+          }
+        }
+      },
+      "SecretComment": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_email": {
+            "type": "string"
+          },
+          "original_timestamp": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "object"
+          }
+        }
+      },
+      "ListOfSecretCommments": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SecretComment"
+        }
+      },
+      "Notifier": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "notifier_name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "comment": {
+            "type": "object"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "health_status": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

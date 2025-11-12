@@ -1,0 +1,39 @@
+# CODEOWNERS file for Starbucks Coffee Shop
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, they will be requested for
+# review when someone opens a pull request.
+
+# Global owners
+* @jkzilla
+
+# Security-sensitive files require security team review
+/SECURITY.md @jkzilla
+/GITHUB_ADVANCED_SECURITY_SETUP.md @jkzilla
+/.github/workflows/ @jkzilla
+/.github/dependabot.yml @jkzilla
+/.trufflehog/ @jkzilla
+
+# Backend code
+/graph/schema.resolvers.go @jkzilla
+/server.go @jkzilla
+/main.go @jkzilla
+*.go @jkzilla
+
+# Frontend security
+/frontend/src/graphql/ @jkzilla
+/frontend/src/main.tsx @jkzilla
+
+# Configuration files
+/.circleci/ @jkzilla
+/Dockerfile @jkzilla
+/.golangci.yml @jkzilla
+
+# Testing
+/TESTING.md @jkzilla
+/graph/*_test.go @jkzilla
+/frontend/e2e/ @jkzilla
+/frontend/playwright.config.ts @jkzilla
+
+# Documentation
+/README.md @jkzilla
+/QUICKSTART.md @jkzilla

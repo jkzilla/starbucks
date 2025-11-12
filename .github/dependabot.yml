@@ -1,12 +1,103 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# GitHub Advanced Security - Dependabot Configuration
+# Automatically create pull requests to keep dependencies up to date
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Go dependencies
+  - package-ecosystem: "gomod"
+    directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - "jkzilla"
+    labels:
+      - "dependencies"
+      - "go"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    # Group updates
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Security updates
+    allow:
+      - dependency-type: "all"
 
+  # NPM dependencies (frontend)
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - "jkzilla"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "frontend"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    # Version update strategies
+    versioning-strategy: increase
+    # Group updates
+    groups:
+      react-dependencies:
+        patterns:
+          - "react*"
+          - "@types/react*"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+    # Security updates
+    allow:
+      - dependency-type: "all"
+    ignore:
+      # Ignore major version updates for stable packages
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    assignees:
+      - "jkzilla"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "security"
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

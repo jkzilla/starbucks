@@ -1,0 +1,23 @@
+# Simple TruffleHog CircleCI Configuration Example
+# See: https://circleci.com/docs/2.0/configuration-reference
+#
+# Note: This is a simplified example. The actual config.yml has a more comprehensive setup.
+# Adjust the --since-commit value to match your default branch that people merge into.
+
+version: 2.1
+
+jobs:
+  scan-secrets:
+    docker:
+      - image: trufflesecurity/trufflehog:latest
+    steps:
+      - checkout
+      - run:
+          name: "Scan for secrets"
+          # change --since-commit to match your default branch
+          command: trufflehog git file://. --since-commit main --branch "$CIRCLE_BRANCH" --fail --only-verified
+
+workflows:
+  scan-secrets:
+    jobs:
+      - scan-secrets
