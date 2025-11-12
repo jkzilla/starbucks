@@ -66,10 +66,7 @@ jobs:
       - run:
           name: "Scan for secrets"
           command: |
-            trufflehog git file://. \
-              --since-commit main \
-              --branch "$CIRCLE_BRANCH" \
-              --fail \
+            trufflehog filesystem . \
               --only-verified \
               --json > trufflehog-results.json || true
             
