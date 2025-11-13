@@ -1,0 +1,29 @@
+# TruffleHog Scanner Configuration
+# https://github.com/trufflesecurity/trufflehog
+
+# Scan configuration
+scan:
+  # Scan the filesystem
+  filesystem:
+    paths:
+      - /project
+  
+  # Only report verified secrets
+  only-verified: false
+  
+  # Output format
+  json: true
+  
+  # Fail on findings
+  fail: true
+
+# Exclude patterns (optional)
+exclude:
+  paths:
+    - node_modules/
+    - .git/
+    - dist/
+    - build/
+    - coverage/
+    - "*.min.js"
+    - "*.map"

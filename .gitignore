@@ -23,6 +23,13 @@ frontend/dist/
 frontend/.env
 frontend/.env.local
 
+# Environment variables
+.env
+.env.local
+
+# TruffleHog scanner configs (contains tokens)
+trufflehog-scanner-config-*.yaml
+
 # IDE
 .vscode/
 .idea/

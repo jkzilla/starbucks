@@ -829,3 +829,6 @@ output:
 **Demo Complete!** Ready to secure your secrets? 🔒
 
 *For questions or to schedule a live demo, contact: @jkzilla*
+
+
+source .env && ~/Downloads/trufflehog-scanner-arm64 scan --config=trufflehog-scanner-config-starbucks.yaml
