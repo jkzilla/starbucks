@@ -1,0 +1,58 @@
+# Example TruffleHog Enterprise scanner config
+
+trufflehogAddress: persistent-agile-smoothie.api.c1.prod.trufflehog.org:8443
+trufflehogScannerGroup: scan2
+trufflehogScannerToken: thog-agent-REDACTED_SCANNER_TOKEN
+
+logJson: true
+logLevel: info
+
+notifiers:
+  - name: stdout
+    sendUnverified: true
+    type: NOTIFIER_TYPE_STDOUT
+
+sources:
+  # Confluence source
+  - name: Confluence
+    type: SOURCE_TYPE_CONFLUENCE
+    verify: true
+    scanPeriod: 5m
+    connection:
+      '@type': type.googleapis.com/sources.Confluence
+      endpoint: https://your-confluence-site.atlassian.net/wiki
+      basicAuth:
+        # username for Confluence Cloud must be an email
+        username: your-email@example.com
+        # password for Confluence Cloud must be an Access Token
+        password: CONFLUENCE_API_TOKEN_REDACTED
+      spaces:
+        - your-space-key
+      includeAttachments: true
+      skipHistory: true
+      spacesScope: ALL
+
+  # Local Git repo source
+  - name: Starbucks Git Repo
+    type: SOURCE_TYPE_GIT
+    verify: true
+    scanPeriod: 5m
+    connection:
+      '@type': type.googleapis.com/sources.Git
+      unauthenticated: {}
+      directories:
+        - /path/to/starbucks
+      skipBinaries: true
+
+  # Jira source
+  - name: JIRA
+    type: SOURCE_TYPE_JIRA
+    verify: true
+    scanPeriod: 5m
+    connection:
+      '@type': type.googleapis.com/sources.JIRA
+      endpoint: https://your-jira-site.atlassian.net
+      basicAuth:
+        # Jira Cloud requires an API token for the password
+        username: your-email@example.com
+        password: JIRA_API_TOKEN_REDACTED
