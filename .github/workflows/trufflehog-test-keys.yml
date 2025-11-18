@@ -1,0 +1,26 @@
+name: TruffleHog Test Keys Demo
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 3 * * *"  # nightly demo run (3am UTC)
+
+jobs:
+  scan-test-keys:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo (for context only)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone Truffle Security test_keys repo
+        run: |
+          git clone https://github.com/trufflesecurity/test_keys.git
+          ls -la test_keys
+
+      - name: Run TruffleHog against test_keys (verified only)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./test_keys
+          extra_args: --only-verified --json

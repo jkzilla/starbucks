@@ -551,6 +551,38 @@ ROI: 5,682% or 57x return
 
 ## 🎬 Part 6: Live Demo Script
 
+### Demo 0: Official TruffleHog Test Repo (Verified Secrets)
+
+```bash
+# Scan Truffle Security's official test repo (remote)
+trufflehog git https://github.com/trufflesecurity/test_keys --results=verified
+
+# Or, depending on your version:
+trufflehog git https://github.com/trufflesecurity/test_keys --only-verified
+
+# Clone locally and scan via filesystem (handy for CI or offline demos)
+git clone https://github.com/trufflesecurity/test_keys.git
+trufflehog git file://test_keys --results=verified
+```
+
+**What This Shows:**
+- Only **verified** live canary credentials from Truffle Security
+- Typical output includes AWS keys with extra context (account, ARN, permissions)
+- Great way to demo "detected + verified" flow without exposing your own secrets
+
+**Expected Output (simplified):**
+```json
+{
+  "DetectorName": "AWS",
+  "Verified": true,
+  "Raw": "AKIA...",
+  "ExtraData": {
+    "account": "XXXXXXXXXXXX",
+    "arn": "arn:aws:iam::XXXXXXXXXXXX:user/trufflehog-test-user"
+  }
+}
+```
+
 ### Demo 1: Basic Scan
 
 ```bash
@@ -726,13 +758,30 @@ output:
 
 1. **Install Pre-commit Hooks**
    ```bash
+   # Install pre-commit framework
    pip install pre-commit
+   
+   # Install the hooks from .pre-commit-config.yaml
    pre-commit install
+   
+   # Test the hook (optional)
+   pre-commit run --all-files
    ```
+   
+   **What this does:**
+   - Automatically scans commits for secrets before they're committed
+   - Blocks commits containing verified secrets
+   - Runs on both `commit` and `push` stages
+   - Uses Docker to run TruffleHog (no local installation needed)
 
 2. **Run Baseline Scan**
    ```bash
+   # Using TruffleHog OSS (if installed locally)
    trufflehog git file://. --json > baseline-scan.json
+   
+   # OR using Docker
+   docker run --rm -v "$(pwd):/workdir" trufflesecurity/trufflehog:latest \
+     git file:///workdir --only-verified --json > baseline-scan.json
    ```
 
 3. **Review Results**
@@ -830,5 +879,8 @@ output:
 
 *For questions or to schedule a live demo, contact: @jkzilla*
 
+pkill -f trufflehog-scanner-arm64 && sleep 2 && ~/Downloads/trufflehog-scanner-arm64 scan --config=/tmp/trufflehog-config-final.yaml
 
-source .env && ~/Downloads/trufflehog-scanner-arm64 scan --config=trufflehog-scanner-config-starbucks.yaml
+restart server
+
+pkill -f starbucks

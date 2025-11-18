@@ -15,16 +15,17 @@ import (
 
 const defaultPort = "8080"
 
-// corsMiddleware adds CORS headers to allow frontend access
+// corsMiddleware adds CORS headers to allow frontend and Apollo Studio access
 func corsMiddleware(next http.Handler) http.Handler {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"http://localhost:5173", // Local development
-			"http://localhost:8080", // Production
+			"http://localhost:5173",              // Local development
+			"http://localhost:8080",              // Production
+			"https://studio.apollographql.com",   // Apollo Studio
 		},
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"*"},
-		AllowCredentials: true,
+		AllowCredentials: true, // Required for cookies with SameSite=None; Secure
 	})
 	return c.Handler(next)
 }
