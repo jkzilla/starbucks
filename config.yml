@@ -1,3 +1,5 @@
 STRIPE_KEY=sk_live_test123
 STRIPE_KEY=sk_live_test123
 STRIPE_KEY=sk_live_test123
+STRIPE_SECRET_KEY=sk_live_1234567890abcdefghijklmnopqrstuv
+STRIPE_SECRET_KEY=sk_live_1234567890abcdefghijklmnopqrstuv

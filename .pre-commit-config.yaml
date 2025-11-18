@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: trufflehog
         name: TruffleHog
-        entry: bash -c 'trufflehog git file://. --since-commit HEAD --only-verified --fail'
+        entry: bash -c 'trufflehog git file://. --since-commit HEAD --fail'
         language: system
         stages: ["pre-commit", "pre-push"]
 
